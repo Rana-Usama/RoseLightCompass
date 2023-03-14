@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView,BackHandler,Platform,Modal,Dimensions } from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import CountDown from 'react-native-countdown-component';
+import RNExitApp from 'react-native-exit-app';
 
 //components
 import Screen from './../components/Screen';
@@ -9,11 +10,14 @@ import Screen from './../components/Screen';
 //config
 import Colors from '../config/Colors';
 
+const { height } = Dimensions.get('window');
+
 function DetectionScreen(props) {
+
+     const [addActionModal, setAddActionModal] = useState(false);
 
     return (
         <Screen style={styles.screen} >
-
             <ScrollView style={{ flex: 1, width: '100%' }} >
                 <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }} >
 
@@ -27,7 +31,7 @@ function DetectionScreen(props) {
 
                     {/* OK button */}
                     <View style={{ backgroundColor: Colors.lightRed, width: RFPercentage(30), height: RFPercentage(30), borderRadius: RFPercentage(50), justifyContent: 'center', alignItems: 'center', marginTop: RFPercentage(8) }} >
-                        <TouchableOpacity activeOpacity={0.6} style={{ backgroundColor: Colors.red, width: RFPercentage(25), height: RFPercentage(25), borderRadius: RFPercentage(50), justifyContent: 'center', alignItems: 'center' }} >
+                        <TouchableOpacity onPress={()=> setAddActionModal(true)} activeOpacity={0.6} style={{ backgroundColor: Colors.red, width: RFPercentage(25), height: RFPercentage(25), borderRadius: RFPercentage(50), justifyContent: 'center', alignItems: 'center' }} >
                             <Text style={{ color: Colors.white, fontSize: RFPercentage(5), fontWeight: '600' }} >
                                 I'm OK
                             </Text>
@@ -42,7 +46,7 @@ function DetectionScreen(props) {
                     </Text>
 
                     {/* Timer Button */}
-                    <CountDown
+                    <CountDown  
                         until={20}
                         size={30}
                         onFinish={() => props.navigation.navigate("MapScreen")}
@@ -53,6 +57,19 @@ function DetectionScreen(props) {
                     />
                 </View>
             </ScrollView>
+
+            <Modal visible={addActionModal} transparent={true}  >
+                <View style={{ backgroundColor: "rgba(0, 0, 0, 0.65)", height: height, justifyContent: "center", alignItems: "center", width: "100%" }} >
+                    <View style={{ alignItems: "center", justifyContent: 'center', borderRadius: RFPercentage(3), backgroundColor: "white", marginBottom: RFPercentage(7), height: RFPercentage(32), width: "70%" }} >
+                        <View style={{ width: '80%', alignItems: 'center', justifyContent: 'center' }}>
+                            {/* <Image style={{ marginTop: RFPercentage(3.4), width: RFPercentage(12), height: RFPercentage(12) }} source={require('../../assets/images/done.png')} /> */}
+                            <Text style={{ lineHeight:RFPercentage(3),textAlign:'center',marginTop: RFPercentage(2), color: 'black', fontWeight: 'bold', fontSize: RFPercentage(2) }} >
+                            Thankfully You are OK! You can close the app now.
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </Screen>
     );
 }
